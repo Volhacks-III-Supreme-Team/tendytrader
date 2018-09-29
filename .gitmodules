@@ -1,0 +1,3 @@
+[submodule "data/omega-red"]
+	path = data/omega-red
+	url = git@github.com:linanqiu/omega-red.git
