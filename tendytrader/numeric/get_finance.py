@@ -18,10 +18,11 @@ def get_stock_data(tick, start, end, threads=(int)(resource.RLIMIT_NPROC*0.25)):
     assert isinstance(start, datetime.datetime), "Error: start time must be datetime object"
     assert isinstance(end, datetime.datetime), "Error: end time must be datetime object"
     yf.pdr_override()
-    if tick is str:
+    if type(tick) is str:
         data = (tick, pdr.get_data_yahoo(tick, start=start, end=end, threads=threads))
     else:
         data = []
         for t in tick:
-            data.append( (t, pdr.get_data_yahoo(t, start=start, end=end, threads=threads)) )
+            data.append((t, pdr.get_data_yahoo(t, start=start, end=end, threads=threads)))
+
     return data
