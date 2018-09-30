@@ -1,4 +1,4 @@
-from TextBlob import TextBlob
+from textblob import TextBlob
 import os
 from pandas import DataFrame
 
@@ -15,8 +15,8 @@ def average_sentiment(term, comments=True, **kwargs):
         abs_in = os.path.abspath('../data/reddit/submissions')
         pd = read_csv(os.path.join(abs_in, 'submissions_' + term + '.csv'))
     if 'subreddit' in kwargs:
-        for i, sr in pd['subreddit'] 
-            if sr != kwargs['subreddit']
+        for i, sr in pd['subreddit']:
+            if sr != kwargs['subreddit']:
                 pd.drop(i) 
 
     for body in pd['body']:
@@ -27,12 +27,14 @@ def average_sentiment(term, comments=True, **kwargs):
                 st = TextBlob(sentence)
                 if i >= kwargs['num_posts']-1:
                     break
-                sum_polarity, sum_sentiment += st.sentiment
+                sent = st.sentiment
+                sum_polarity += sent[0]; sum_sentiment += sent[1]
                 num += 1
         else:
             for sentence in text.sentences:
                 st = TextBlob(sentence)
-                sum_polarity, sum_sentiment += st.sentiment
+                sent = st.sentiment
+                sum_polarity += sent[0]; sum_sentiment += sent[1]
                 num += 1
     avg_polarity = sum_polarity / num
     avg_sentiment = sum_sentiment / num
