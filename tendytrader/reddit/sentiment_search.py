@@ -5,6 +5,9 @@ import datetime as dt
 import time
 import os
 import json
+
+### TODO Finish whatever this is
+
 '''
 fpath = os.path.join("")
 with open('../tickers.txt') as f:
