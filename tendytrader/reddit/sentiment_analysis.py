@@ -27,7 +27,8 @@ def average_sentiment(term, comments=True, **kwargs):
                 st = TextBlob(sentence)
                 if i >= kwargs['num_posts']-1:
                     break
-                sum_polarity, sum_sentiment += st.sentiment
+                sent = st.sentiment
+                sum_polarity += sent[0]; sum_sentiment += sent[1]
                 num += 1
         else:
             for sentence in text.sentences:
