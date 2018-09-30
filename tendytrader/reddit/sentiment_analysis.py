@@ -33,7 +33,8 @@ def average_sentiment(term, comments=True, **kwargs):
         else:
             for sentence in text.sentences:
                 st = TextBlob(sentence)
-                sum_polarity, sum_sentiment += st.sentiment
+                sent = st.sentiment
+                sum_polarity += sent[0]; sum_sentiment += sent[1]
                 num += 1
     avg_polarity = sum_polarity / num
     avg_sentiment = sum_sentiment / num
