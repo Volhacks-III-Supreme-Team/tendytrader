@@ -27,6 +27,8 @@ def gen_label_data(financials_df):
     labels = []
     for i in range(len(financials_df.index)-1):
         labels.append(int(financials_df['Open'][i] <= financials_df['Open'][i+1]))
+    labels.append(0)
+    financials_df["label"] = labels
 
 def merge_datasets(terms):
     # load csvs from reddit comments, submissions, 
