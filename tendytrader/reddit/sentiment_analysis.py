@@ -3,13 +3,16 @@ import os
 from pandas import DataFrame
 
 # kwargs: num_posts, subreddit,
-def average_sentiment(term, **kwargs):
+def average_sentiment(term, comments=True, **kwargs):
     # There is also polarity
     sum_polarity = 0.0
     sum_sentiment = 0.0
     num = 0
     abs_in = os.path.abspath('../data/reddit/')
-    pd = read_csv(os.path.join(abs_in, term + '.csv'))
+    if comments:
+        pd = read_csv(os.path.join(abs_in, 'comments_' + term + '.csv'))
+    else:
+        pd = read_csv(os.path.join(abs_in, 'submissions_' + term + '.csv'))
     if 'subreddit' in kwargs:
         for i, sr in pd['subreddit'] 
             if sr != kwargs['subreddit']
