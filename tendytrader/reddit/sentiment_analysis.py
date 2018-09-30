@@ -1,4 +1,4 @@
-from TextBlob import TextBlob
+from textblob import TextBlob
 import os
 from pandas import DataFrame
 
