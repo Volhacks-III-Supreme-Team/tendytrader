@@ -19,7 +19,7 @@ def split_sentiment_by_day(df):
     print(DFList)
     return DFList
     
-def pull_dataset(begin_time, end_time)
+def pull_dataset(terms, begin_time, end_time)
     pass
     
 def merge_datasets(terms):
@@ -27,7 +27,7 @@ def merge_datasets(terms):
     abs_in_comments = os.path.abspath('../data/reddit/comments/')
     abs_in_finance = os.path.abspath('../data/numeric/')
     # abs_in_submissions = os.path.abspath('../data/reddit/submissions')
-
+    df_list = []
     for term in terms:
         reddit_localname = 'comments_' + term + '.csv'
         comments_df = pandas.read_csv(os.path.join(abs_in_comments, reddit_localname))
@@ -39,9 +39,12 @@ def merge_datasets(terms):
         }
         # Organizes sentiments from per term to per day
         for df in split_sentiment_by_day(comments_df):
-            sentiment_list.append(average_sentiment(df))
+            sentiment_dict.append(average_sentiment(df))
 
+        sentiments = pandas.DataFrame(sentiment_dict)
         financials_df.join(sentiments)
-        
+        df_list.append(financials_df)
+    
+    return df_list
 
 
