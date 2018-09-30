@@ -19,10 +19,28 @@ def split_sentiment_by_day(df):
         DFList.append(group[1])
     print(DFList)
     return DFList
-    
-def pull_dataset(terms, begin_time, end_time)
-    pass
 
+def get_terms():    
+    abs_terms = os.path.abspath('../')
+    terms = []
+    with open(os.path.join(abs_terms, 'terms.txt'), 'r') as f:
+        terms = f.read().split(',')
+    return terms
+
+def get_tickers():
+    return get_terms()
+
+def pull_dataset(terms, begin_time, end_time):
+    pass
+  
+# Binary decision, up or down. Not mixed with other tickers
+def gen_label_data(financials_df):
+    labels = []
+    for i in range(len(financials_df.index)-1):
+        labels.append(int(financials_df['Open'][i] <= financials_df['Open'][i+1]))
+    labels.append(0)
+    financials_df["label"] = labels
+    
 def kill_weekends(sentiments, financials):
     sent_heap = heapq.heapify(sentiments.index[:])
     fin_heap = heapq.heapify(financials.index[:])
@@ -34,7 +52,7 @@ def kill_weekends(sentiments, financials):
             sent_weekends.append(sent_date)
             heapq.heappush(fin_date)
     sentiments.drop(index=sent_weekends)
-    
+
 def merge_datasets(terms):
     # load csvs from reddit comments, submissions, 
     abs_in_comments = os.path.abspath('../data/reddit/comments/')
@@ -56,6 +74,7 @@ def merge_datasets(terms):
 
         sentiments = pandas.DataFrame(sentiment_dict)
         financials_df.join(sentiments)
+        gen_label_data(financials_df)
         df_list.append(financials_df)
     
     return df_list

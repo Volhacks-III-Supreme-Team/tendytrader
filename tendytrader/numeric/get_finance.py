@@ -24,5 +24,4 @@ def get_stock_data(tick, start, end, threads=(int)(resource.RLIMIT_NPROC*0.25)):
     else:
         for t in tick:
             data.append((t, pdr.get_data_yahoo(t, start=start, end=end, threads=threads)))
-
     return data
