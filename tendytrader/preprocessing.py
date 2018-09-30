@@ -22,10 +22,11 @@ def split_sentiment_by_day(df):
 def pull_dataset(terms, begin_time, end_time)
     pass
 
-# Binary decision, up or down
-def gen_label_data(financials_df):
-    for i in range(len(financials_df.index)):
-        
+# Binary decision, up or down. Not mixed with other tickers
+def gen_label_data(financial_df):
+    labels = []
+    for i in range(len(financials_df.index)-1):
+        labels.append(int(financials_df['Open'][i] <= financials_df['Open'][i+1]))
 
 def merge_datasets(terms):
     # load csvs from reddit comments, submissions, 
@@ -48,6 +49,7 @@ def merge_datasets(terms):
 
         sentiments = pandas.DataFrame(sentiment_dict)
         financials_df.join(sentiments)
+        gen_label_data(financials_df)
         df_list.append(financials_df)
     
     return df_list

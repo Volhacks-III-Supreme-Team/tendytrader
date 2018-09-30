@@ -9,7 +9,7 @@ import praw
 reddit = praw.Reddit(client_id='Kq6zH6HM1m7VEg', \
                      client_secret='4Dqt6IHeYF2-weUzJ6zzirbP9zs', \
                      user_agent='lsenti')
-                     
+
 api = PushshiftAPI(reddit)
 epoch = dt.datetime.utcfromtimestamp(0)
 
@@ -27,7 +27,7 @@ def get_reddit_comments(search_terms, subreddits, begin_time, end_time, size, ou
         os.makedirs(abs_out)
     for term in search_terms:
         data = api.search_comments(q=term, subreddit=subreddits, after=epoch_time(begin_time), 
-            before=epoch_time(end_time), sort='desc', size=size, \
+            before=epoch_time(end_time), sort='asc', size=size, \
             filter=['subreddit','id', 'score', 'body', 'created_utc'])
         
         topics_dict = {
@@ -58,7 +58,7 @@ def get_reddit_submissions(search_terms, subreddits, begin_time, end_time, size,
         os.makedirs(abs_out)
     for term in search_terms:
         data = api.search_submissions(q=term, subreddit=subreddits, 
-            sort='desc', size=size, after=epoch_time(begin_time), before=epoch_time(end_time),  
+            sort='asc', size=size, after=epoch_time(begin_time), before=epoch_time(end_time),  
             filter=['subreddit', 'title', 'id', 'score', 'body', 'created_utc'])
         topics_dict = { "subreddit":[], 
             "title":[], 
