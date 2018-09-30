@@ -1,5 +1,4 @@
 from psaw import PushshiftAPI
-import praw
 import pandas as pd
 import datetime as dt
 import time
@@ -11,9 +10,6 @@ with open('../tickers.txt') as f:
     tickers = f.read().split()
 filename = test
 '''
-reddit = praw.Reddit(client_id='Kq6zH6HM1m7VEg', \
-                     client_secret='4Dqt6IHeYF2-weUzJ6zzirbP9zs', \
-                     user_agent='lsenti')
 
 api = PushshiftAPI()
 
