@@ -1,16 +1,31 @@
 from TextBlob import TextBlob
-import csv
-from collections import defaultdict
+import os
+from pandas import DataFrame
 
-columns = defaultdict(list) # each value in each column is appended to a list
+# kwargs: num_posts, subreddit,
+def average_sentiment(term, **kwargs):
+    # There is also polarity
+    sum_polarity = 0.0
+    sum_sentiment = 0.0
+    abs_in = os.path.abspath('../data/reddit/')
+    pd = read_csv(os.path.join(abs_in, term + '.csv'))
+    if 'subreddit' in kwargs:
+        for i, sr in pd['subreddit'] 
+            if sr != kwargs['subreddit']
+                pd.drop(i) 
 
-with open('file.txt') as f:
-    reader = csv.DictReader(f) # read rows into a dictionary format
-    for row in reader: # read a row as {column1: value1, column2: value2,...}
-        for (k,v) in row.items(): # go over each column name and value 
-            columns[k].append(v) # append the value into the appropriate list
-                                 # based on column name k
+    for body in pd['body']:
+        text = TextBlob(body)
+        # Tokenize
+        if 'num_posts' in kwargs:
+            for i, sentence in enumerate(text.sentences):
+                st = TextBlob(sentence)
+                if i >= kwargs['num_posts']-1:
+                    break
+                sum_polarity, sum_sentiment += st.sentiment
+        else:
+            for sentence in text.sentences:
+                st = TextBlob(sentence)
+                sum_polarity, sum_sentiment += st.sentiment
 
-print(columns['name'])
-print(columns['phone'])
-print(columns['street'])
+            
