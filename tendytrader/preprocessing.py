@@ -19,7 +19,7 @@ def split_sentiment_by_day(df):
     print(DFList)
     return DFList
     
-def pull_dataset(terms, begin_time, end_time)
+def pull_dataset(terms, begin_time, end_time):
     pass
 
 # Binary decision, up or down. Not mixed with other tickers
