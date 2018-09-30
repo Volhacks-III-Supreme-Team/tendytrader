@@ -18,7 +18,17 @@ def split_sentiment_by_day(df):
         DFList.append(group[1])
     print(DFList)
     return DFList
-    
+
+def get_terms():    
+    abs_terms = os.path.abspath('../')
+    terms = []
+    with open(os.path.join(abs_terms, 'terms.txt'), 'r') as f:
+        terms = f.read().split(',')
+    return terms
+
+def get_tickers():
+    return get_terms()
+
 def pull_dataset(terms, begin_time, end_time):
     pass
 
