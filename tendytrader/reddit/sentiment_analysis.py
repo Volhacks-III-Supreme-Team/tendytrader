@@ -15,8 +15,8 @@ def average_sentiment(term, comments=True, **kwargs):
         abs_in = os.path.abspath('../data/reddit/submissions')
         pd = read_csv(os.path.join(abs_in, 'submissions_' + term + '.csv'))
     if 'subreddit' in kwargs:
-        for i, sr in pd['subreddit'] 
-            if sr != kwargs['subreddit']
+        for i, sr in pd['subreddit']:
+            if sr != kwargs['subreddit']:
                 pd.drop(i) 
 
     for body in pd['body']:
