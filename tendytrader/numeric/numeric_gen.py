@@ -23,8 +23,7 @@ def export_ticker_to_csv(ticker, start, end, threads=(int)(resource.RLIMIT_NPROC
     if (not os.path.isdir(abs_out)):
         os.makedirs(abs_out)
     data = get_stock_data(ticker, start, end, threads)
-    for tick, stime, df in data:
+    for tick, df in data:
         clean_stock_nan(df)
         df["ticker"] = ticker
-        df["start_time"] = stime.replace(tzinfo=dt.timezone.utc).timestamp()
         df.to_csv(os.path.join(abs_out, "{0:s}.csv".format(ticker)))
