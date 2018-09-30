@@ -4,9 +4,14 @@ import datetime as dt
 import time
 import os
 import json
+import praw
 
-api = PushshiftAPI()
-epoch = datetime.datetime.utcfromtimestamp(0)
+reddit = praw.Reddit(client_id='Kq6zH6HM1m7VEg', \
+                     client_secret='4Dqt6IHeYF2-weUzJ6zzirbP9zs', \
+                     user_agent='lsenti')
+                     
+api = PushshiftAPI(reddit)
+epoch = dt.datetime.utcfromtimestamp(0)
 
 def epoch_time(dt):
     return (dt - epoch).total_seconds()
@@ -52,8 +57,8 @@ def get_reddit_submissions(search_terms, subreddits, begin_time, end_time, size,
     if (not os.path.isdir(abs_out)):
         os.makedirs(abs_out)
     for term in search_terms:
-        data = api.search_submissions(q=term, subreddit=subreddits, \
-            sort='desc', size=size, after=epoch_time(begin_time), before=epoch_time(end_time) \ 
+        data = api.search_submissions(q=term, subreddit=subreddits, 
+            sort='desc', size=size, after=epoch_time(begin_time), before=epoch_time(end_time),  
             filter=['subreddit', 'title', 'id', 'score', 'body', 'created_utc'])
         topics_dict = { "subreddit":[], 
             "title":[], 

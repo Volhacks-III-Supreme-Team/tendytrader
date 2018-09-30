@@ -21,7 +21,12 @@ def split_sentiment_by_day(df):
     
 def pull_dataset(terms, begin_time, end_time)
     pass
-    
+
+# Binary decision, up or down
+def gen_label_data(financials_df):
+    for i in range(len(financials_df.index)):
+        
+
 def merge_datasets(terms):
     # load csvs from reddit comments, submissions, 
     abs_in_comments = os.path.abspath('../data/reddit/comments/')
