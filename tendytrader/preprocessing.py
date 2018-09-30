@@ -2,6 +2,7 @@ import os
 import datetime as dt
 import pandas
 from reddit.sentiment_analysis import average_sentiment
+import heapq
 
 # Takes phat dataframe from long time, 
 def split_sentiment_by_day(df):
@@ -21,6 +22,18 @@ def split_sentiment_by_day(df):
     
 def pull_dataset(terms, begin_time, end_time)
     pass
+
+def kill_weekends(sentiments, financials):
+    sent_heap = heapq.heapify(sentiments.index[:])
+    fin_heap = heapq.heapify(financials.index[:])
+    sent_weekends = []
+    while len(sent_heap) != 0 and len(fin_heap) != 0:
+        sent_date = heapq.heappop(sent_heap)
+        fin_date = heapq.heappop(fin_heap)
+        if sent_date < fin_date:
+            sent_weekends.append(sent_date)
+            heapq.heappush(fin_date)
+    sentiments.drop(index=sent_weekends)
     
 def merge_datasets(terms):
     # load csvs from reddit comments, submissions, 
@@ -46,5 +59,3 @@ def merge_datasets(terms):
         df_list.append(financials_df)
     
     return df_list
-
-
