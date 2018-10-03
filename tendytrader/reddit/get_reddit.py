@@ -46,14 +46,12 @@ def get_reddit_comments(search_terms, subreddits, begin_time, end_time, size, ou
 
         tstamps = [get_date(i).isoformat() for i in tstamps]
 
-        for key in topics_dict:
-            print(key + " len: " + str(len(topics_dict[key])))
-
         data = pd.DataFrame(topics_dict)
         data.index = tstamps
         localname = 'comments_' + term + '.csv'
         data.to_csv(os.path.join(abs_out, localname), index=False) 
 
+#TODO: Fix me 
 def get_reddit_submissions(search_terms, subreddits, begin_time, end_time, size, out_dir="../data/reddit/submissions"):
     abs_out = os.path.abspath(out_dir)
     if (not os.path.isdir(abs_out)):
