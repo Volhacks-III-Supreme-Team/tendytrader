@@ -1,6 +1,6 @@
 from textblob import TextBlob
 import os
-from pandas import DataFrame
+from pandas import DataFrame, read_csv
 
 # kwargs: num_posts, subreddit,
 def average_sentiment(term, comments=True, **kwargs):

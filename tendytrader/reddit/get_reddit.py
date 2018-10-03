@@ -6,15 +6,11 @@ import os
 import json
 import praw
 
-reddit = praw.Reddit(client_id='Kq6zH6HM1m7VEg', \
-                     client_secret='4Dqt6IHeYF2-weUzJ6zzirbP9zs', \
-                     user_agent='lsenti')
-
-api = PushshiftAPI(reddit)
+api = PushshiftAPI()
 epoch = dt.datetime.utcfromtimestamp(0)
 
-def epoch_time(dt):
-    return (dt - epoch).total_seconds()
+def epoch_time(dtdt):
+    return (dtdt - epoch).total_seconds()
 
 def get_date(created):
     return dt.datetime.fromtimestamp(created)
@@ -26,8 +22,9 @@ def get_reddit_comments(search_terms, subreddits, begin_time, end_time, size, ou
     if (not os.path.isdir(abs_out)):
         os.makedirs(abs_out)
     for term in search_terms:
-        data = api.search_comments(q=term, subreddit=subreddits, after=epoch_time(begin_time), 
-            before=epoch_time(end_time), sort='asc', size=size, \
+        
+        data = api.search_comments(q=term, subreddit=subreddits, after=int(begin_time.timestamp()), 
+            before=int(end_time.timestamp()), sort='asc', size=size, \
             filter=['subreddit','id', 'score', 'body', 'created_utc'])
         
         topics_dict = {
@@ -35,7 +32,7 @@ def get_reddit_comments(search_terms, subreddits, begin_time, end_time, size, ou
                 "id" : [],
                 "score" : [],
                 "body" : [],
-                "created_utc" : []    
+                #"created_utc" : []    
         }
         tstamps = []
 
@@ -44,9 +41,14 @@ def get_reddit_comments(search_terms, subreddits, begin_time, end_time, size, ou
             topics_dict["id"].append(comment.id)
             topics_dict["body"].append(comment.body.replace('\r', ' ').replace('\n', ' '))
             # topics_dict["created_utc"].append(comment.created_utc)
+            tstamps.append(comment.created_utc)
             topics_dict["score"].append(comment.score)
 
         tstamps = [get_date(i).isoformat() for i in tstamps]
+
+        for key in topics_dict:
+            print(key + " len: " + str(len(topics_dict[key])))
+
         data = pd.DataFrame(topics_dict)
         data.index = tstamps
         localname = 'comments_' + term + '.csv'
@@ -64,7 +66,7 @@ def get_reddit_submissions(search_terms, subreddits, begin_time, end_time, size,
             "title":[], 
             "score":[], 
             "id":[], 
-            "created_utc": [], 
+            #"created_utc": [], 
             "body":[]
         }
         tstamps = []
