@@ -3,8 +3,6 @@ import pandas as pd
 import datetime as dt
 import time
 import os
-import json
-import praw
 
 api = PushshiftAPI()
 epoch = dt.datetime.utcfromtimestamp(0)
@@ -16,7 +14,7 @@ def get_date(created):
     return dt.datetime.fromtimestamp(created)
     
 # See pushshift API for descriptions of arguments  https://pushshift.io/api-parameters/
-def get_reddit_comments(search_terms, subreddits, begin_time, end_time, size, out_dir="../data/reddit/comments"):
+def get_reddit_comments(search_terms, subreddits, begin_time, end_time, out_dir="../data/reddit/comments"):
         
     abs_out = os.path.abspath(out_dir)
     if (not os.path.isdir(abs_out)):
@@ -24,7 +22,7 @@ def get_reddit_comments(search_terms, subreddits, begin_time, end_time, size, ou
     for term in search_terms:
         
         data = api.search_comments(q=term, subreddit=subreddits, after=int(begin_time.timestamp()), 
-            before=int(end_time.timestamp()), sort='asc', size=size, \
+            before=int(end_time.timestamp()), sort='asc', \
             filter=['subreddit','id', 'score', 'body', 'created_utc'])
         
         topics_dict = {
@@ -32,7 +30,8 @@ def get_reddit_comments(search_terms, subreddits, begin_time, end_time, size, ou
                 "id" : [],
                 "score" : [],
                 "body" : [],
-                #"created_utc" : []    
+                "created_utc" : [],
+                "created" : []    
         }
         tstamps = []
 
@@ -40,14 +39,14 @@ def get_reddit_comments(search_terms, subreddits, begin_time, end_time, size, ou
             topics_dict["subreddit"].append(comment.subreddit)
             topics_dict["id"].append(comment.id)
             topics_dict["body"].append(comment.body.replace('\r', ' ').replace('\n', ' '))
-            # topics_dict["created_utc"].append(comment.created_utc)
-            tstamps.append(comment.created_utc)
+            topics_dict["created_utc"].append(comment.created_utc)
             topics_dict["score"].append(comment.score)
+            topics_dict["created"].append(get_date(comment.created_utc))
 
-        tstamps = [get_date(i).isoformat() for i in tstamps]
+
+        # tstamps = [get_date(i) for i in tstamps]
 
         data = pd.DataFrame(topics_dict)
-        data.index = tstamps
         localname = 'comments_' + term + '.csv'
         data.to_csv(os.path.join(abs_out, localname), index=False) 
 

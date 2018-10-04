@@ -8,14 +8,7 @@ def average_sentiment(term_df, comments=True, **kwargs):
     sum_polarity = 0.0
     sum_sentiment = 0.0
     num = 0
-    '''
-    if comments:
-        abs_in = os.path.abspath('../data/reddit/comments')
-        pd = read_csv(os.path.join(abs_in, 'comments_' + term + '.csv'))
-    else:
-        abs_in = os.path.abspath('../data/reddit/submissions')
-        pd = read_csv(os.path.join(abs_in, 'submissions_' + term + '.csv'))
-    '''
+    
     if 'subreddit' in kwargs:
         for i, sr in term_df['subreddit']:
             if sr != kwargs['subreddit']:
