@@ -6,6 +6,7 @@ from reddit.get_reddit import get_reddit_comments, get_reddit_submissions
 import numpy as np
 from pandas.tseries.holiday import USFederalHolidayCalendar
 from pandas.tseries.offsets import CustomBusinessDay
+import heapq
 
 def get_date(created):
     return dt.datetime.fromtimestamp(float(created))
@@ -49,12 +50,26 @@ def get_tickers():
 # Pulls with uniform timeframe for financial and sentiment data
 def pull_dataset(terms, begin_time, end_time):
     pass
-
+  
 # Binary decision, up or down. Not mixed with other tickers
 def gen_label_data(financials_df):
     labels = []
     for i in range(len(financials_df.index)-1):
         labels.append(int(financials_df['Open'][i] <= financials_df['Open'][i+1]))
+    labels.append(0)
+    financials_df["label"] = labels
+    
+def kill_weekends(sentiments, financials):
+    sent_heap = heapq.heapify(sentiments.index[:])
+    fin_heap = heapq.heapify(financials.index[:])
+    sent_weekends = []
+    while len(sent_heap) != 0 and len(fin_heap) != 0:
+        sent_date = heapq.heappop(sent_heap)
+        fin_date = heapq.heappop(fin_heap)
+        if sent_date < fin_date:
+            sent_weekends.append(sent_date)
+            heapq.heappush(fin_date)
+    sentiments.drop(index=sent_weekends)
 
 # Merges financial dataset with financial dataset
 def merge_datasets(terms):
@@ -67,11 +82,9 @@ def merge_datasets(terms):
         reddit_localname = 'comments_' + term + '.csv'
         comments_df = pandas.read_csv(os.path.join(abs_in_comments, reddit_localname))
         financials_df = pandas.read_csv(os.path.join(abs_in_finance, term + '.csv'))
-        sentiments = get_sentiment_series(split_df_by_day(comments_df))
+        sentiments = get_sentiment_series(split_df(comments_df, 'D'))
         financials_df.join(sentiments)
         gen_label_data(financials_df)
         df_list.append(financials_df)
     
     return df_list
-
-
